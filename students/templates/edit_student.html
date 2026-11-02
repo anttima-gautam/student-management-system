@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student</title>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'students/style.css' %}">
+</head>
+<body>
+
+    <h1>Edit Student: {{ student.name }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Update Student</button>
+    </form>
+
+    <a href="{% url 'view_students' %}">Back to Students</a>
+
+</body>
+</html>

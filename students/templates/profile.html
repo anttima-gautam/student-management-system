@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{% static 'students/style.css' %}">
+</head>
+<body>
+
+<div class="main-content">
+    <h1>My Profile</h1>
+
+    <div class="card">
+        <h3>Username: {{ request.user.username }}</h3>
+        <p>Email: {{ request.user.email|default:"Not added" }}</p>
+        <p>First Name: {{ request.user.first_name|default:"Not added" }}</p>
+        <p>Last Name: {{ request.user.last_name|default:"Not added" }}</p>
+    </div>
+
+    <a href="{% url 'home' %}">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

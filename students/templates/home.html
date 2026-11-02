@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="{% static 'students/style.css' %}">
+</head>
+<body>
+
+    <div class="sidebar">
+    <h2>SMS</h2>
+
+    <a href="{% url 'home' %}">Dashboard</a>
+
+    <a href="{% url 'view_students' %}">Students</a>
+
+    <a href="{% url 'profile' %}">My Profile</a>
+
+    <a href="{% url 'password_change' %}">Settings</a>
+
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+    <div class="main-content">
+
+        <h1>Student Management Dashboard</h1>
+
+        <h3>Welcome, {{ request.user.username }}!</h3>
+
+        {% if perms.students.add_student %}
+            <p>Role: Administrator</p>
+        {% else %}
+            <p>Role: Staff</p>
+        {% endif %}
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Total Students</h3>
+                <h2>{{ total_students }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>Active Students</h3>
+                <h2>{{ active_students }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>Courses</h3>
+                <h2>{{ total_courses }}</h2>
+            </div>
+
+        </div>
+
+        <div class="student-section">
+            <h2>Manage Students</h2>
+
+            {% if perms.students.add_student %}
+                <a href="{% url 'add_student' %}">
+                    <button>Add New Student</button>
+                </a>
+            {% endif %}
+
+            <a href="{% url 'view_students' %}">
+                <button>View Students</button>
+                <a href="{% url 'export_students' %}">
+    <button>Export Students</button>
+</a>
+            </a>
+
+            <a href="{% url 'profile' %}">
+                <button>My Profile</button>
+            </a>
+
+            <a href="{% url 'password_change' %}">
+                <button>Change Password</button>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

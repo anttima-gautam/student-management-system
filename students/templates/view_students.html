@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Students</title>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'students/style.css' %}">
+</head>
+<body>
+
+    <h1>All Students</h1>
+    <form method="GET">
+    <input
+        type="text"
+        name="search"
+        placeholder="Search by name, email or course..."
+        value="{{ query|default:'' }}"
+    >
+
+    <select name="status">
+        <option value="">All Students</option>
+        <option value="active" {% if status == 'active' %}selected{% endif %}>
+            Active Students
+        </option>
+        <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>
+            Inactive Students
+        </option>
+    </select>
+
+    <button type="submit">Apply Filter</button>
+</form>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Course</th>
+            <th>Action</th>
+        </tr>
+
+        {% for student in students %}
+        <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.phone }}</td>
+            <td>{{ student.course }}</td>
+            <td>
+    {% if perms.students.change_student %}
+    <a href="{% url 'edit_student' student.id %}">Edit</a>
+{% endif %}
+
+<br>
+
+{% if perms.students.delete_student %}
+    <a href="{% url 'delete_student' student.id %}">Delete</a>
+{% endif %}
+</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No students found.</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    <div class="pagination">
+
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&search={{ query|default:''|urlencode }}&status={{ status|default:'' }}">
+            <button>Previous</button>
+        </a>
+    {% endif %}
+
+    <span>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&search={{ query|default:''|urlencode }}&status={{ status|default:'' }}">
+            <button>Next</button>
+        </a>
+    {% endif %}
+
+</div>
+
+    <br>
+    <a href="/">Back to Dashboard</a>
+
+</body>
+</html>
